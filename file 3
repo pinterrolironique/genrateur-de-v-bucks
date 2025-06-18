@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Générateur de V-Bucks</title>
+</head>
+<body>
+  <h1>Générateur de V-Bucks</h1>
+  <input type="text" id="username" placeholder="Pseudo Fortnite" />
+  <select id="platform">
+    <option>PC</option><option>PS4</option><option>Xbox</option><option>Switch</option><option>Mobile</option>
+  </select>
+  <select id="amount">
+    <option>1000</option><option>2800</option><option>5000</option><option>13500</option>
+  </select>
+  <button onclick="startFakeProcess()">Générer</button>
+  <p id="status" style="display:none;"></p>
+  <div id="codeSection" style="display:none;">
+    <p>Voici votre code :</p>
+    <div id="generatedCode">FTN-XXXX-XXXX-XXXX</div>
+    <button onclick="copyCode()">Copier le code</button>
+  </div>
+  <script>
+    const steps = ["Connexion à Epic Games...","Vérification...","Transmission des V-Bucks...","Génération du code..."];
+    function startFakeProcess() {
+      const status = document.getElementById('status');
+      const codeBox = document.getElementById('codeSection');
+      status.style.display = 'block';
+      codeBox.style.display = 'none';
+      let i = 0;
+      status.textContent = steps[i];
+      const interval = setInterval(() => {
+        i++;
+        if (i < steps.length) {
+          status.textContent = steps[i];
+        } else {
+          clearInterval(interval);
+          status.style.display = 'none';
+          codeBox.style.display = 'block';
+          document.getElementById('generatedCode').textContent = generateFakeCode();
+        }
+      }, 1500);
+    }
+    function generateFakeCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      const segment = () => [...Array(4)].map(() => chars[Math.floor(Math.random()*chars.length)]).join('');
+      return `FTN-${segment()}-${segment()}-${segment()}`;
+    }
+    function copyCode() {
+      navigator.clipboard.writeText(document.getElementById('generatedCode').textContent);
+      alert(\"Code copié ! (Mais il est faux 😅)\");
+    }
+  </script>
+</body>
+</html>
